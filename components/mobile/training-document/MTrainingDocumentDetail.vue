@@ -1,0 +1,223 @@
+<template>
+  <main class="main">
+    <header class="header">
+      <span class="header__topbar mt-4">
+        <v-btn icon @click="openPage('/training-document', { page: previous_page })">
+          <i class="back"></i>
+        </v-btn>
+        <a class="link"  @click=" openPage('/training-document', { page: previous_page })"
+          >{{ $t('TRAINING_DOCUMENT.HEADER') }}&nbsp;&nbsp;&nbsp;</a
+        >
+      </span>
+      <hr />
+    </header>
+
+    <section class="content" v-if="training_document">
+      <h2 class="content__title">
+        {{ training_document.topic }}
+      </h2>
+      <div class="content__image">
+        <img :src="`${image_url}${training_document.image}`" />
+      </div>
+      <div class="content__header">
+        <v-row>
+          <v-col class="9">
+            <p>
+              {{ $t('TRAINING_DOCUMENT_DETAIL.TRAINER') }} :
+              <span class="content__headerInfo">{{
+                $lang(
+                  training_document.trainer_name_th,
+                  training_document.trainer_name_en
+                )
+              }}</span>
+            </p>
+            <p>
+              {{ $t('TRAINING_DOCUMENT_DETAIL.PUBLISH_DATE') }} :
+              <span class="content__headerInfo">{{
+                training_document.created_at
+              }}</span>
+            </p>
+          </v-col>
+          <v-col class="3">
+            <v-btn
+              @click.prevent="downloadItem(url=`${download_training_document_url}`+training_document.id)"
+              depressed
+              color="error"
+            >
+              {{ $t('TRAINING_DOCUMENT_DETAIL.DOWNLOAD_DOCUMENT') }}
+              <i class="paper-download"></i>
+            </v-btn>
+            <p class="total-download">
+              {{
+                $t('TRAINING_VIDEO_DETAIL.TOTAL_DOWNLOAD').replace(
+                  '%s',
+                  training_document.total_download
+                )
+              }}
+            </p>
+            <!-- <p v-if="!$store.state.user.user_id" class="warning-login">
+              {{ $t('SHARED.OTHER.WARNING_LOGIN') }}
+            </p> -->
+          </v-col>
+        </v-row>
+      </div>
+      <div
+        v-html="$lang(training_document.detail_th, training_document.detail_th)"
+        class="content__html"
+      ></div>
+    </section>
+  </main>
+</template>
+
+<script>
+  import Swal from 'sweetalert2'
+
+  export default {
+    name: 'MTrainingDocumentDetail',
+    /* props: ['id'], */
+    watch: {
+      id: {
+        async handler(val, oldVal) {
+          await this.getDocument()
+          await this.updateTotalView()
+        },
+        deep: true,
+      },
+    },
+    data() {
+      return {
+        image_url: process.env.image_url,
+        document_url: process.env.document_url,
+        video_url: process.env.video_url,
+        download_training_document_url: process.env.download_training_document_url,
+        training_document: null,
+        id: this.$route.query.id,
+      }
+    },
+    async mounted() {
+      await this.getDocument()
+      await this.updateTotalView()
+    },
+    methods: {
+       openPage(path, query = null) {
+        this.$router.push({ path, query })
+      },
+      async getDocument() {
+        let res = await this.$store.dispatch('training_document/find', this.id)
+        this.training_document = res.data
+      },
+      async updateTotalView() {
+        await this.$store.dispatch('training_document/updateTotalView', this.id)
+      },
+      async updateTotalDownload() {
+        await this.$store.dispatch(
+          'training_document/updateTotalDownload',
+          this.id
+        )
+        await this.getDocument()
+      },
+      async downloadItem(url) {
+        if (!this.$store.state.user.user_id) {
+          Swal.fire({
+            text: this.$t(`SHARED.OTHER.WARNING_LOGIN`),
+            icon: 'error',
+            showCancelButton: false,
+            confirmButtonText: this.$t('SHARED.DIALOG.CLOSE'),
+          })
+        } else {
+          const a = document.createElement('a')
+          a.href = url
+          a.download = url.split('/').pop()
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
+          await this.updateTotalDownload()
+        }
+      },
+    },
+  }
+</script>
+
+<style scoped lang="scss">
+  .main {
+    padding: 12px;
+  }
+  .header {
+    &__topbar {
+      color: #001538;
+      position: relative;
+
+      &:after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 6px;
+        border-radius: 6px;
+        background: #000;
+        position: absolute;
+        bottom: -11px;
+        left: 0;
+      }
+      .link {
+        color: #001538;
+      }
+    }
+    hr {
+      display: block;
+      height: 1px;
+      border: 0;
+      border-top: 2px solid #ccc;
+      padding: 0;
+    }
+  }
+
+  .content {
+    margin-top: 12px;
+    &__title {
+      font-size: 22px;
+      color: #001538;
+    }
+    &__image > img {
+      max-width: 100%;
+      object-fit: cover;
+    }
+    &__header {
+      color: #001538;
+      margin-top: 12px;
+      font-size: 11px !important;
+      &Info {
+        color: #8c8c8c !important;
+      }
+      .v-btn {
+        font-size: 10px !important;
+      }
+    }
+    &__html {
+      color: #001538;
+    }
+    .total-download {
+      margin: 10px 0;
+      font-size: 12px;
+      text-align: center;
+      color: #b2b2b2;
+    }
+    .warning-login {
+      font-size: 12px;
+      text-align: center;
+      color: #f00;
+    }
+  }
+
+  .recommend {
+    margin-left: -12px;
+    padding-left: 12px;
+    width: 100vw;
+    background: #f8f7f6;
+
+    &__title {
+      padding-top: 12px;
+      font-size: 22px;
+      color: #001538;
+    }
+  }
+</style>

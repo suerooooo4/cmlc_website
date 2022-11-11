@@ -1,0 +1,181 @@
+<template>
+    <div>
+        <v-card class="back_color">
+            <img class="with-img" src="../../../static/images/Dspic.png" alt="">
+            <v-card-text>
+                <p class="text-center">ศูนย์การเรียนรู้สื่อชุมชน มหาวิทยาลัยพะเยา ชวนนักแต่งเพลง นักดนตรี Producer
+                    นักร้อง นักศึกษา และ ผู้ที่ต้องการ
+                    Up-skill การแต่งเพลงและผลิตมิวสิควิดีโอ กับ 3 วิทยากรมากความสามารถด้านดนตรี อาจารย์ติ๊ด-โสฬส
+                    ปุณกะบุตร,
+                    อาจารย์ชิ-ผศ.ดร. สุวิชาน พัฒนาไพรวัลย์ และคุณเชวง ไชยวรรณ ผู้กำกับภาพยนตร์สั้นเจ้าของ 2
+                    รางวัลจากเทศกาล
+                    19th International Festival Signs of the Night - Berlin (7th Edition) และ Tokyo International Short
+                    Film Festival 2021 ในการอบรมเชิงปฏิบัติการ “การสร้างสรรค์เพลงจากเรื่องเล่าของชุมชน (The Local
+                    Rhythm)”
+                </p>
+            </v-card-text>
+            <v-card class="p-4">
+                <div class="gray_area">
+                    <div>
+                        <h3 class="text-center-crad">ค่าฝึกอบรมฯ ตลอด 30 ชั่วโมงรวมที่พัก และอาหาร สุดคุ้ม เพียง 3,000 บาท
+                            สมัครและลงทะเบียนด่วนวันนี้จนถึง 10 กรกฏาคม 2565 รับจำนวนจำกัดไม่เกิน 20 คน เท่านั้น
+                        </h3>
+                    </div>
+                    <div class="flex-btn">
+                        <v-btn color="#EFB008" class="padding" dark v-bind="attrs"
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSfY1ImxguZAIYrZw2pBVR_3VL8k9LwOS-MrZaB5agI7riA8BQ/viewform"
+                            target="_blank" v-on="on">สมัครลงทะเบียน
+                        </v-btn>&nbsp;
+                        <v-btn color="#001538" class="padding" dark v-bind="attrs" v-on="on" @click="closeForm(false)">
+                            เข้าสู่เว็บไซต์
+                        </v-btn>
+                    </div>
+                &nbsp;
+
+                </div>
+                <div class="flex-footter">
+                    <p class="footter">ขอรายละเอียดเพื่มเติมได้ทาง ศูนย์เรียนรู้สื่อชุมชน <br />
+                        Community Media Learning Center <br />หรือโทรศัพท์ 095 447 1842</p>
+                </div>
+            </v-card>
+        </v-card>
+    </div>
+</template>
+
+<script>
+export default {
+    components: {
+
+    },
+    name: 'Mspecial_new',
+    data() {
+        return {
+            register_dialog: false,
+            login_dialog: false,
+        }
+    },
+    methods: {
+        closeForm(value) {
+            this.$emit('speci_dialog', value)
+        },
+        openLogin() {
+            this.login_dialog = true
+        },
+        closeLoginModal(value = false) {
+            this.login_dialog = false
+
+            if (value) {
+                this.register_dialog = true
+            }
+        },
+        openRegister() {
+            this.register_dialog = true
+        },
+        closeRegisterModal(value = false) {
+            this.register_dialog = false
+
+            if (value) {
+                this.login_dialog = true
+            }
+        },
+    },
+}
+</script>
+
+<style scoped lang="scss">
+.flex-footter {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.footter {
+    position: relative;
+    width: 412px;
+    height: 72px;
+    font-family: 'Prompt';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 24px;
+    text-align: center;
+    color: #001538;
+    top: 10px;
+}
+
+.back_color {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.padding {
+    position: relative;
+    display: block;
+    width: 70%;
+    font-size: 12px !important;
+}
+
+.with-img {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.gray_area{
+  background-color: #F4F4F4;
+  width: 100%;
+}
+
+.flex-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.p-4 {
+    padding: 10px;
+    margin-top: -30px;
+    margin-bottom: 5px;
+}
+
+.text-center-crad {
+    padding: 10px;
+    color: #001538;
+    font-family: 'Prompt';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 30px;
+    text-align: center;
+    margin-top: 0px;
+
+}
+
+.end_card {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.text-center {
+    text-align: center;
+    color: #001538;
+    margin: 15px 0;
+    line-height: 30px;
+    padding: 5px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    margin-top: -20px;
+
+}
+</style>
